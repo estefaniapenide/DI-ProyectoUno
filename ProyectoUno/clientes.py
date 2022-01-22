@@ -1,4 +1,5 @@
 from PyQt5.QtGui import QFont
+from PyQt5 import QtCore, QtGui, QtWidgets
 
 import var
 from dni import Dni
@@ -45,21 +46,28 @@ class Clientes:
 
     def selSexo(self):
         try:
+            global sex
             if var.ui.rbMujer.isChecked():
-                print('marcado muller')
+                #print('marcado muller')
+                sex='Muller'
             if var.ui.rbHombre.isChecked():
-                print('marcado home')
+                #print('marcado home')
+                sex='Home'
         except Exception as error:
             print('Error en módulo seleccionar sexo:',error)
 
     def selPago(self):
         try:
+            var.pay = []
             if var.ui.cbEfectivo.isChecked():
                 print('pagas con efectivo')
+                var.pay.append('Efectivo')
             if var.ui.cbTarjeta.isChecked():
                 print('pagas con tajeta')
+                var.pay.append('Tarxeta')
             if var.ui.cbTransferencia.isChecked():
                 print('pagas con transferencia')
+                var.pay.append('Transferencia')
         except Exception as error:
             print('Error: %s' % str(error))
 
@@ -73,8 +81,9 @@ class Clientes:
 
     def seleccionarProvincia(prov):
         try:
-            print('Has seleccionado la provincia de ',prov)
-            return prov
+            global vprov
+            #print('Has seleccionado la provincia de ',prov)
+            vprov=prov
         except Exception as error:
             print('Error: %s' % str(error))
 
@@ -91,3 +100,53 @@ class Clientes:
             var.dlgCalendario.hide()
         except Exception as error:
             print('Error: %' % str(error))
+
+    '''def mostrarClientes():
+        try:
+            #Preparamos el registro
+            nuevoCli = []
+            cliente =[var.ui.leDNI, var.ui.leApellidos, var.ui.leNombre, var.ui.leFecha,var.ui.leDireccion ]
+            for i in cliente:
+                nuevoCli.append(i.text())
+            nuevoCli.append(vprov)
+            nuevoCli.append(sex)
+            #elimina duplicados
+            var.pay = set(var.pay)
+            for j in var.pay:
+                nuevoCli.append(j)
+            print(nuevoCli)
+        except Exception as error:
+            print('Error: %s '%str(error))'''
+
+    def mostrarClientes():
+        try:
+            # Preparamos el registro
+            nuevoCli = []
+            clitab= []
+            cliente = [var.ui.leDNI, var.ui.leApellidos, var.ui.leNombre, var.ui.leFecha, var.ui.leDireccion]
+            k = 0
+            for i in cliente:
+                nuevoCli.append(i.text())
+                #cargaremos los valores para la tabla que solo tiene DNI, Apelidos y Nome
+                if k < 3:
+                    clitab.append(i.text())
+                    k += 1
+            nuevoCli.append(vprov)
+            nuevoCli.append(sex)
+            # elimina duplicados
+            var.pay = set(var.pay)
+            for j in var.pay:
+                nuevoCli.append(j)
+            print(nuevoCli)
+            print(clitab)
+            row = 0  #posición de la fila, problema: coloca al último comoprimero en cada click
+            column = 0  #posición de la columna
+            var.ui.cliTabla.insertRow(row) #insertamos una fila nueva con cada click de botón
+            for registro in clitab:
+                #la celda tiene una posición fila, columna y cragamos en ella el dato
+                cell= QtWidgets.QTableWidgetItem(registro) #carga en cell cada dato de la lista
+                var.ui.cliTabla.setItem(row,column,cell) #lo escribe
+                column += 1
+        except Exception as error:
+            print('Error: %s ' % str(error))
+

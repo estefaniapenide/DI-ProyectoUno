@@ -1,5 +1,6 @@
 import sys
 
+import clientes
 import var
 
 

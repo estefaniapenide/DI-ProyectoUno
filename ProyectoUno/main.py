@@ -26,7 +26,7 @@ class Main(QtWidgets.QMainWindow):
         '''En caso de no haberlos agrupado en qtDesigner y no haber creado allí bgSexo, 
         se crearía la variable global en var y se asignaría aquí la agrupación de esta manera:'''
         '''var.bgSexo = (var.ui.rbMujer,var.ui.rbHombre)
-            for i in var.bgSexo:
+        for i in var.bgSexo:
             i.toggled.connect(clientes.Clientes.selSexo)'''
         var.cbPago = (var.ui.cbEfectivo, var.ui.cbTarjeta, var.ui.cbTransferencia)
         for i in var.cbPago:
@@ -36,6 +36,8 @@ class Main(QtWidgets.QMainWindow):
         var.ui.comBoxProvincia.activated[str].connect(clientes.Clientes.seleccionarProvincia)
 
         var.ui.btCalendario.clicked.connect(clientes.Clientes.abrirCalendario)
+
+        var.ui.btAceptar.clicked.connect(clientes.Clientes.mostrarClientes)
 
 
 class DialogSalir(QtWidgets.QDialog):
